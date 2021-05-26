@@ -42,32 +42,140 @@
   </fieldset>
 
   <section id="error-btns">
-    <button>Console Log Demo</button>
-    <button>Console Error Demo</button>
-    <button>Console Dir</button>
-    <button>Console dirxml</button>
-    <button>Console Error</button>
-    <button>Console Group Start</button>
-    <button>Console Group End</button>
-    <button>Console Table</button>
-    <button>Start Timer</button>
-    <button>End Timer</button>
-    <button>Console Trace</button>
+    <button id="cld">Console Log Demo</button>
+    <button id="ced">Console Error Demo</button>
+    <button id="cdir">Console Dir</button>
+    <button id="cdirxml">Console dirxml</button>
+    <button id="ce">Console Error</button>
+    <button id="cgs">Console Group Start</button>
+    <button id="cge">Console Group End</button>
+    <button id="ct">Console Table</button>
+    <button id="st">Start Timer</button>
+    <button id="et">End Timer</button>
+    <button id="ctrace">Console Trace</button>
     <button>Trigger a Global Error</button>
   </section>
 
   <script>
-    let calculateBtn = document.querySelector('#calculate');
-    calculateBtn.addEventListener('click', () => {
-      let output = document.querySelector('output');
-      let firstNum = document.querySelector('#first-num').value;
-      let secondNum = document.querySelector('#second-num').value;
-      let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
-    });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
     // TODO - Make buttons functional
+    const cld = document.getElementById("cld");
+    cld.addEventListener("click", () => {
+      console.log("Console Log Demo");
+    });
+
+    const ced = document.getElementById("ced");
+    ced.addEventListener("click", () => {
+      console.error("Console Error Demo");
+    });
+
+    const cdir = document.getElementById("cdir");
+    cdir.addEventListener("click", () => {
+      console.dir(document.getElementById('cdir'));
+    });
+
+    const cdirxml = document.getElementById("cdirxml");
+    cdirxml.addEventListener("click", () => {
+      console.dirxml(document);
+    });
+
+    const ce = document.getElementById("ce");
+    ce.addEventListener("click", () => {
+      console.error("Console Error");
+    });
+
+    const cgs = document.getElementById("cgs");
+    const labelG = "CSE 110 Lab 9 Console Testing"
+    cgs.addEventListener("click", () => {
+      console.group(labelG);
+    });
+
+    const cge = document.getElementById("cge");
+    cge.addEventListener("click", () => {
+      console.groupEnd(labelG);
+    });
+
+    const ct = document.getElementById("ct");
+    ct.addEventListener("click", () => {
+      console.table([
+        {
+          Character: "Keqing",
+          Acquired: "Yes",
+        },
+        {
+          Character: "Jean",
+          Acquired: "Yes",
+        },
+        {
+          Character: "Ayaka",
+          Acquired: "No",
+        }
+      ]);
+    });
+
+    const st = document.getElementById("st");
+    const labelT = "Time Test"
+    st.addEventListener("click", () => {
+      console.log("Timer Started!");
+      console.time(labelT);
+    });
+
+    const et = document.getElementById("et");
+    et.addEventListener("click", () => {
+      console.log("Timer Ended!");
+      console.timeEnd(labelT);
+    });
+
+    const ctrace = document.getElementById("ctrace");
+    ctrace.addEventListener("click", () => {
+      const first = () => { second(); };
+      const second = () => { third(); };
+      const third = () => { fourth(); };
+      const fourth = () => { console.trace(); };
+      first();
+    });
+
+    try {
+      const pi = 3.15;
+      const c = 2 * pi * 5;
+
+      if(pi != 3.14) {
+        throw new RangeError("pi should be 3.14");
+      }
+
+      console.log("The circumference of a circle with radius 5 is: " + c);
+    } catch(err) {
+      console.error(err.name + ": " + err.message);
+    } finally {
+      console.log("I hope pi was implemented correctly.")
+    }
+
+    class FunnyNumError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "FunnyNumberError";
+      }
+    }
+
+    let calculateBtn = document.querySelector('#calculate');
+    calculateBtn.addEventListener('click', () => {
+      try {
+        let output = document.querySelector('output');
+        let firstNum = document.querySelector('#first-num').value;
+        let secondNum = document.querySelector('#second-num').value;
+
+        if(firstNum == 69 || secondNum == 69 || firstNum == 420 || secondNum == 420) {
+          throw new FunnyNumError("Cringe. I can't believe you used that number.");
+        }
+
+        let operator = document.querySelector('#operator').value;
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      } catch(err) {
+        console.error(err.name + ": " + err.message);
+      }
+    });
+
   </script>
 </body>
 </html>
