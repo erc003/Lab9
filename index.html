@@ -53,8 +53,18 @@
     <button id="st">Start Timer</button>
     <button id="et">End Timer</button>
     <button id="ctrace">Console Trace</button>
-    <button>Trigger a Global Error</button>
+    <button id="ge">Trigger a Global Error</button>
   </section>
+
+  <!-- TrackJS Agent Install Start-->
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "7bd7337d94d840378bbb09f89203d5a6"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+  <!-- TrackJS Agent Install End-->
 
   <script>
 
@@ -175,6 +185,16 @@
         console.error(err.name + ": " + err.message);
       }
     });
+
+    const ge = document.getElementById("ge");
+    ge.addEventListener("click", () => {
+      noNameFunc();
+    });
+
+    window.onerror = function() {
+      TrackJS.track('Testing TrackJS!');          
+      console.log("Global Oof");
+    }
 
   </script>
 </body>
